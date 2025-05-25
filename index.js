@@ -5,6 +5,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+var cors = require('cors');
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -12,6 +13,12 @@ var tasksRouter = require("./routes/tasks");
 var userTaskRouter = require("./routes/userTask");
 
 var app = express();
+
+app.use(cors({
+  origin: "http://localhost:8080", 
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], 
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 app.use(logger("dev"));
 app.use(express.json());

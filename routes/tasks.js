@@ -5,13 +5,13 @@ const prisma = new PrismaClient();
 // const bcrypt = require('bcrypt');
 // const { stringify } = require('jade/lib/utils');
 
-/* GET users listing. */
-router.get('/get-all', async function (req, res) {
+// Get all Tasks
+router.get('/', async function (req, res) {
   const tasks = await prisma.task.findMany();
-  res.send(tasks);
+  res.json(tasks);
 });
 
-router.get('/get/:id', async function (req, res) {
+router.get('/:id', async function (req, res) {
   const { id } = req.params;
 
   const task = await prisma.task.findUnique({
@@ -21,38 +21,45 @@ router.get('/get/:id', async function (req, res) {
   res.json(task);
 });
 
+// Create Task
 router.post('/create', async function (req, res) {
-  const { title, desc, priority, created_by, deadline, is_done } = req.body;
+  const { title, desc, priority, created_by, deadline, status, created_at, updated_at, updated_by} = req.body;
   const task = await prisma.task.create({
     data: {
-      title,
-      desc,
-      priority,
-      created_by,
-      deadline,
-      is_done,
+      title: title,
+      desc: desc,
+      priority: priority,
+      deadline: deadline,
+      status: status,
+      created_by: created_by,
+      created_at: created_at,
+      updated_at: updated_at,
+      updated_by: updated_by
     },
   });
-
+  
   res.send(task);
 });
 
-//Update Task
-router.put('/update/:id', async function (req, res) {
+// Update Task
+router.put('/:id', async function (req, res) {
   const { id } = req.params;
-  const { title, desc, priority, created_by, deadline, is_done } = req.body;
+  const { title, desc, priority, created_by, deadline, status, created_at, updated_at, updated_by } = req.body;
 
   const task = await prisma.task.update({
     where: {
       id: parseInt(id),
     },
     data: {
-      title,
-      desc,
-      priority,
-      created_by,
-      deadline,
-      is_done,
+      title: title,
+      desc: desc,
+      priority: priority,
+      deadline: deadline,
+      status: status,
+      created_by: created_by,
+      created_at: created_at,
+      updated_by: updated_by,
+      updated_at: updated_at
     },
   });
 
@@ -60,7 +67,7 @@ router.put('/update/:id', async function (req, res) {
 });
 
 // Delete Task
-router.delete('/delete/:id', async function (req, res) {
+router.delete('/:id', async function (req, res) {
   const { id } = req.params;
   const task = await prisma.task.delete({
     where: {
